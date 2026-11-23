@@ -7,7 +7,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fix Manifest
         run: |
-          printf '<?xml version="1.0" encoding="utf-8"?>\n<manifest xmlns:android="http://android.com">\n    <application android:allowBackup="true" android:label="Lettore Manga" android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">\n        <activity android:name=".MainActivity" android:exported="true">\n            <intent-filter>\n                <action android:name="android.intent.action.MAIN" />\n                <category android:name="android.intent.category.LAUNCHER" />\n            </intent-filter>\n        </activity>\n    </application>\n</manifest>\n' > app/src/main/AndroidManifest.xml
+          python3 -c '
+          p = "and" + "roid"
+          xml = f"""<?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:{p}="http://schemas.{p}.com/apk/res/{p}">
+              <application {p}:allowBackup="true" {p}:label="Lettore Manga" {p}:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+                  <activity {p}:name=".MainActivity" {p}:exported="true">
+                      <intent-filter>
+                          <action {p}:name="{p}.intent.action.MAIN" />
+                          <category {p}:name="{p}.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>"""
+          open("app/src/main/AndroidManifest.xml", "w").write(xml)
+          '
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
